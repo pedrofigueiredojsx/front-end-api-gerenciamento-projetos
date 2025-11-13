@@ -8,7 +8,6 @@ Project and task management system built with React.
 - React Router DOM
 - Axios
 - TailwindCSS
-- React Query
 
 ## 📦 Installation
 
