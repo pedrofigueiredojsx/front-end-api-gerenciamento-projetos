@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import api from '../services/api';
-import Layout from '../components/Layout';
+import { useState, useEffect } from "react";
+import api from "../services/api";
+import Layout from "../components/Layout";
 
 export default function Dashboard() {
   const [stats, setStats] = useState(null);
@@ -12,10 +12,28 @@ export default function Dashboard() {
 
   const loadStats = async () => {
     try {
-      const response = await api.get('/dashboard/stats');
-      setStats(response.data);
+      const response = await api.get("/projects");
+      const projects = response.data.data;
+
+      const totalProjects = projects.length;
+
+      const activeProjects = projects.filter(
+        (p) => p.status === "planejamento" || p.status === "em_progresso"
+      ).length;
+
+      const allTasks = projects.flatMap((p) => p.tasks || []);
+
+      const totalTasks = allTasks.length;
+      const completedTasks = allTasks.filter((t) => t.status === "concluída").length;
+
+      setStats({
+        total_projects: totalProjects,
+        active_projects: activeProjects,
+        total_tasks: totalTasks,
+        completed_tasks: completedTasks,
+      });
     } catch (error) {
-      console.error('Erro ao carregar estatísticas:', error);
+      console.error("Erro ao carregar estatísticas:", error);
     } finally {
       setLoading(false);
     }
@@ -66,7 +84,10 @@ export default function Dashboard() {
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Projetos Recentes</h2>
           <p className="text-gray-600">Acesse a página de Projetos para gerenciar seus projetos</p>
-          <a href="/projects" className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          <a
+            href="/projects"
+            className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
             Ver Projetos
           </a>
         </div>

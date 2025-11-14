@@ -18,9 +18,11 @@ export default function Projects() {
   const loadProjects = async () => {
     setLoading(true);
     try {
-      const url = statusFilter === 'all' 
-        ? '/projects' 
-        : `/projects?status=${statusFilter}`;
+      const url =
+        statusFilter === 'all'
+          ? '/projects'
+          : `/projects?status=${statusFilter}`;
+
       const response = await api.get(url);
       setProjects(response.data.data || response.data);
     } catch (error) {
@@ -34,7 +36,7 @@ export default function Projects() {
     if (confirm('Tem certeza que deseja deletar este projeto?')) {
       try {
         await api.delete(`/projects/${id}`);
-        setProjects(projects.filter(p => p.id !== id));
+        setProjects(projects.filter((p) => p.id !== id));
       } catch (error) {
         console.error('Erro ao deletar projeto:', error);
       }
@@ -60,7 +62,7 @@ export default function Projects() {
         {showForm && (
           <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-xl font-bold mb-4">Criar Novo Projeto</h2>
-            <ProjectForm 
+            <ProjectForm
               onSuccess={() => {
                 setShowForm(false);
                 loadProjects();
@@ -71,7 +73,9 @@ export default function Projects() {
         )}
 
         <div className="bg-white p-4 rounded-lg shadow">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Filtrar por Status</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Filtrar por Status
+          </label>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -80,7 +84,7 @@ export default function Projects() {
             <option value="all">Todos</option>
             <option value="planejamento">Planejamento</option>
             <option value="em_progresso">Em Progresso</option>
-            <option value="concluído">Concluído</option>
+            <option value="concluido">Concluído</option>
             <option value="pausado">Pausado</option>
           </select>
         </div>
@@ -102,29 +106,46 @@ export default function Projects() {
         ) : (
           <div className="space-y-4">
             {projects.map((project) => (
-              <div key={project.id} className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition cursor-pointer">
+              <div
+                key={project.id}
+                className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition cursor-pointer"
+              >
                 <div className="flex justify-between items-start">
-                  <div className="flex-1" onClick={() => navigate(`/projects/${project.id}`)}>
-                    <h3 className="text-lg font-bold text-gray-900">{project.name}</h3>
+                  <div
+                    className="flex-1"
+                    onClick={() => navigate(`/projects/${project.id}`)}
+                  >
+                    <h3 className="text-lg font-bold text-gray-900">
+                      {project.name}
+                    </h3>
+
                     {project.description && (
-                      <p className="text-gray-600 text-sm mt-1">{project.description}</p>
+                      <p className="text-gray-600 text-sm mt-1">
+                        {project.description}
+                      </p>
                     )}
+
                     <div className="flex items-center gap-4 mt-3">
                       <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
                         {project.status}
                       </span>
+
                       <span className="text-xs text-gray-600">
                         {project.team_count} membros
                       </span>
+
                       <div className="w-32 bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-green-600 h-2 rounded-full"
                           style={{ width: `${project.progress}%` }}
                         ></div>
                       </div>
-                      <span className="text-xs text-gray-600">{project.progress}%</span>
+                      <span className="text-xs text-gray-600">
+                        {project.progress}%
+                      </span>
                     </div>
                   </div>
+
                   <button
                     onClick={() => handleDelete(project.id)}
                     className="text-red-600 hover:text-red-800 font-semibold ml-4"
